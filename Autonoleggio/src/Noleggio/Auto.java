@@ -64,4 +64,8 @@ public class Auto {
 		return "Auto [idAuto=" + idAuto + ", nome=" + nome + ", prezzo=" + prezzo + ", statoNoleggio=" + statoNoleggio + ", dataNoleggio="
 				+ dataNoleggio + "]";
 	}
+	
+	 public String toStringPrint() {
+        return idAuto + ", " + nome + ", " + prezzo + ", " + statoNoleggio + ", " + dataNoleggio;
+    }
 }

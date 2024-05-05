@@ -1,5 +1,12 @@
 package Noleggio;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -20,8 +27,25 @@ public class Noleggio {
 		System.out.println(batMobile);
 	}
 
-	public void rimuoviBatMobile(BatMobile batMobile) {
-		listaBatmobili.remove(batMobile);
+	public void rimuoviBatMobile(int IDbatMobile) {//int IDbatMobile invece che BatMobile batMobile
+		//int idAuto invece che Auto auto
+				for (BatMobile bat:listaBatmobili) //ciclo for di ricerca seguito da un remove+break
+				{
+					try {
+					if (bat.getIdAuto()==IDbatMobile)
+					{
+						System.out.println(bat);
+						autoDisponibili.remove(bat);
+						System.out.println("rimossa auto " + bat.getIdAuto());
+						break;
+					}
+					}
+					catch (java.util.ConcurrentModificationException e) {}
+				}
+				
+
+			
+		listaBatmobili.remove(IDbatMobile);
 	}
 
 	public void ricercaBatMobile(String nome) {
@@ -46,15 +70,29 @@ public class Noleggio {
 				System.out.println(bat);
 			}
 		}
-
 	}
 
-	public void aggiungiAuto(Auto auto) {
+	public void aggiungiAuto(Auto auto) throws FileNotFoundException, IOException {
+		autoDisponibili = getAutoFile();
 		autoDisponibili.add(auto);
+		aggiungiAutoFile(auto);
+		System.out.println("Hai aggiunto" + auto + "alla lista delle auto.");
 	}
 
-	public void rimuoviAuto(Auto auto) {
-		autoDisponibili.remove(auto);
+	public void rimuoviAuto(int idAuto) {//int idAuto invece che Auto auto
+		for (Auto auto:autoDisponibili) //ciclo for di ricerca seguito da un remove+break
+		{
+			try {
+				if (auto.getIdAuto()==idAuto)
+				{
+					System.out.println(auto);
+					autoDisponibili.remove(auto);
+					System.out.println("rimossa auto " + auto.getIdAuto());
+					break;
+				}
+			}
+			catch (java.util.ConcurrentModificationException e) {}
+		}
 	}
 
 	public void ricercaAuto(String nome) {
@@ -84,5 +122,45 @@ public class Noleggio {
 				System.out.println(auto);
 			}
 		}
+	}
+	
+	public ArrayList<Auto> getAutoFile() throws FileNotFoundException, IOException {
+		String filePath = "src/listaAuto.txt";
+		File file = new File(filePath);
+		if (!file.exists()) file.createNewFile();
+		String line;
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			while ((line = reader.readLine()) != null) {
+				String[] parti = line.split(",");
+				LocalDate localDate;
+				if (parti[4].trim().equals("null")) {
+					localDate = null;
+				} else {
+					localDate = LocalDate.parse(parti[4].trim());
+				}
+				Auto a = new Auto(Integer.parseInt(parti[0].trim()), parti[1].trim(),
+						Double.parseDouble(parti[2].trim()), Boolean.parseBoolean(parti[3].trim()), localDate);
+				autoDisponibili.add(a);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return autoDisponibili;
+	}
+
+	public void aggiungiAutoFile(Auto auto) throws FileNotFoundException, IOException {
+		String filePath = "src/listaAuto.txt";
+		String line;
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+			writer.write(auto.toStringPrint());
+			writer.newLine();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void rimuoviAutoFile() {
+
 	}
 }
