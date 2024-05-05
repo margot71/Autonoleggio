@@ -45,8 +45,9 @@ public class Noleggio {
 		listaBatmobili.remove(IDbatMobile);
 	}
 
-	public void ricercaBatMobile(String nome) {
+	public void ricercaBatMobile(String nome) throws FileNotFoundException, IOException {
 		System.out.println("Ricerca Batmobili in corso:");
+		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
 		if (nome.equals("tutte")) {
 			for (BatMobile bat : listaBatmobili) {
 				System.out.println(bat);
@@ -91,8 +92,9 @@ public class Noleggio {
 		}
 	}
 
-	public void ricercaAuto(String nome) {
+	public void ricercaAuto(String nome) throws FileNotFoundException, IOException {
 		System.out.println("Ricerca Auto per nome in corso:");
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
 		for (Auto auto : autoDisponibili) {
 			if (auto.getNome().equals(nome)) {
 				System.out.println(auto);
@@ -100,8 +102,9 @@ public class Noleggio {
 		}
 	}
 
-	public void ricercaAuto(double prezzo) {
+	public void ricercaAuto(double prezzo) throws FileNotFoundException, IOException {
 		System.out.println("Ricerca Auto per prezzo in corso:");
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
 		for (Auto auto : autoDisponibili) {
 			if (auto.getPrezzo() <= prezzo) {
 				System.out.println(auto);

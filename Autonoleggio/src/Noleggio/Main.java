@@ -16,33 +16,36 @@ public class Main {
 		int idAuto;
 		String nomeAuto;
 		double prezzo;
-		int flag;
-		
-		Scanner scan = new Scanner(System.in);
-//		//Login utente
-//		System.out.println("Inserisci user: ");
-//		user = scan.nextLine();
-//		System.out.println("Inserisci password: ");
-//		psw = scan.nextLine();
-//		//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
-//		Login login = new Login();
-//		flag = login.inserisciUserPsw(user, psw);
-		
-		boolean start = true;
-		while (start) {
+		int flag=0;
+
+		Scanner scan = new Scanner(System.in);	
+		System.out.println("Inserire un'utenza");
+		//Ciclo su login per utente inesistente
+		while(flag==0) {
 			//Login utente
 			System.out.println("Inserisci user: ");
 			user = scan.nextLine();
 			System.out.println("Inserisci password: ");
 			psw = scan.nextLine();
-			//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
+			//login.inserisciUserPsw restituisce 0 se utente inesistente o valore numerico in base al tipo utente
 			Login login = new Login();
 			flag = login.inserisciUserPsw(user, psw);
+		}
+		
+		if(flag == 1) {
+			System.out.println("BENVENUTO NEL SITO DELL'AUTONOLEGGIO MOVEIT");
+		} else if(flag == 1) {
+			System.out.println("CONSOLLE AUTONOLEGGIO MOVEIT");
+		} else if(flag == 1) {
+			System.out.println("BATGARAGE");
+		}
+		
+		boolean start = true;
+		while (start) {
 			Noleggio noleggio = new Noleggio();
 			//Verifica sulla tipologia utente per presentare il menu, quindi gestire il menu con lo switch		
 			if(flag == 1) {
 				//l'utente è un cliente
-				System.out.println("BENVENUTO NEL SITO DELL'AUTONOLEGGIO MOVEIT");
 				menu = "Cosa vuoi fare? \n 1. Ricerca un'auto per prezzo \n 2. Ricerca un'auto per nome \n 3. Noleggia un'auto \n 4. Esci";
 				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
 				switch (sceltaMenu) {
@@ -70,7 +73,6 @@ public class Main {
 				}
 			} else if(flag == 2) {
 				//l'utente è un manager
-				System.out.println("CONSOLLE AUTONOLEGGIO MOVEIT");
 				menu = "Cosa vuoi fare? \n 1. Inserisci un'auto \n 2. Rimuovi un'auto \n 3. Ricerca un'auto per prezzo \n 4. Ricerca un'auto per nome \n 5. Esci";
 				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
 				switch (sceltaMenu) {
@@ -109,7 +111,6 @@ public class Main {
 				}
 			} else if(flag == 3){
 				//l'utente è Batman
-				System.out.println("BATGARAGE");
 				menu = "Cosa vuoi fare? \n 1. Inserisci un mezzo \n 2. Rimuovi un mezzo \n 3. Ricerca un mezzo \n 4. Seleziona un mezzo \n 5. Esci";
 				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
 				switch (sceltaMenu) {

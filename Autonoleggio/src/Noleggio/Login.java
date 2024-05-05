@@ -41,12 +41,12 @@ public class Login {
 			}
 			if (flag==0)
 			{ 
-				System.out.println("Username o Password errati");
+				System.out.println("Username o Password errati. Riprovare");
 				return 0;
-			}
+ 		}
 			else 
 			{
-				System.out.println("Accesso effettuato per "+typeRead);
+//				System.out.println("Accesso effettuato per "+typeRead);
 				return flag;
 			}
 		}
