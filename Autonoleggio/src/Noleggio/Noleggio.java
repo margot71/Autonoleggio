@@ -21,30 +21,27 @@ public class Noleggio {
 		this.listaBatmobili = new ArrayList<>();
 	}
 
-	public void aggiungiBatMobile(BatMobile batMobile) {
+	public void aggiungiBatMobile(BatMobile batMobile) throws FileNotFoundException, IOException {
 		System.out.println("Aggiunta di Batmobile in corso:");
+		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
 		listaBatmobili.add(batMobile);
-		System.out.println(batMobile);
+		aggiungiBatmobileFile(batMobile);
+		System.out.println("Hai aggiunto" + batMobile + "alla lista delle BatMobili.");
 	}
 
 	public void rimuoviBatMobile(int IDbatMobile) {//int IDbatMobile invece che BatMobile batMobile
-		//int idAuto invece che Auto auto
-				for (BatMobile bat:listaBatmobili) //ciclo for di ricerca seguito da un remove+break
-				{
-					try {
-					if (bat.getIdAuto()==IDbatMobile)
-					{
-						System.out.println(bat);
-						autoDisponibili.remove(bat);
-						System.out.println("rimossa auto " + bat.getIdAuto());
-						break;
-					}
-					}
-					catch (java.util.ConcurrentModificationException e) {}
+		for (BatMobile bat : listaBatmobili) //ciclo for di ricerca seguito da un remove+break
+		{
+			try {
+				if (bat.getIdAuto()==IDbatMobile){
+					System.out.println(bat);
+					autoDisponibili.remove(bat);
+					System.out.println("rimossa auto " + bat.getIdAuto());
+					break;
 				}
-				
-
-			
+			}
+			catch (java.util.ConcurrentModificationException e) {}
+		}
 		listaBatmobili.remove(IDbatMobile);
 	}
 
@@ -73,18 +70,17 @@ public class Noleggio {
 	}
 
 	public void aggiungiAuto(Auto auto) throws FileNotFoundException, IOException {
-		autoDisponibili = getAutoFile();
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
 		autoDisponibili.add(auto);
 		aggiungiAutoFile(auto);
 		System.out.println("Hai aggiunto" + auto + "alla lista delle auto.");
 	}
 
 	public void rimuoviAuto(int idAuto) {//int idAuto invece che Auto auto
-		for (Auto auto:autoDisponibili) //ciclo for di ricerca seguito da un remove+break
+		for (Auto auto : autoDisponibili) //ciclo for di ricerca seguito da un remove+break
 		{
 			try {
-				if (auto.getIdAuto()==idAuto)
-				{
+				if (auto.getIdAuto() == idAuto){
 					System.out.println(auto);
 					autoDisponibili.remove(auto);
 					System.out.println("rimossa auto " + auto.getIdAuto());
@@ -124,10 +120,11 @@ public class Noleggio {
 		}
 	}
 	
-	public ArrayList<Auto> getAutoFile() throws FileNotFoundException, IOException {
-		String filePath = "src/listaAuto.txt";
+	public ArrayList<Auto> getAutoFile(String path) throws FileNotFoundException, IOException {
+		String filePath = path;
 		File file = new File(filePath);
-		if (!file.exists()) file.createNewFile();
+		if (!file.exists())
+			file.createNewFile();
 		String line;
 		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			while ((line = reader.readLine()) != null) {
@@ -153,6 +150,36 @@ public class Noleggio {
 		String line;
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
 			writer.write(auto.toStringPrint());
+			writer.newLine();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<BatMobile> getBatmobileFile(String path) throws FileNotFoundException, IOException {
+		String filePath = path;
+		File file = new File(filePath);
+		if (!file.exists())
+			file.createNewFile();
+		String line;
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			while ((line = reader.readLine()) != null) {
+				String[] parti = line.split(",");
+				BatMobile b = new BatMobile(Integer.parseInt(parti[0].trim()), parti[1].trim());
+				listaBatmobili.add(b);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return listaBatmobili;
+	}
+	
+	public void aggiungiBatmobileFile(BatMobile batmobile) throws FileNotFoundException, IOException {
+		String filePath = "src/listaBatmobili.txt";
+		String line;
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+			writer.write(batmobile.toStringPrint());
 			writer.newLine();
 			writer.close();
 		} catch (IOException e) {
