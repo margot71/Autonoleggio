@@ -2,3 +2,4 @@
 2, Ford Fiesta, 45.29, false, null
 3, AlfaRomeo Giulietta, 70.99, false, null
 4, Fiat Punto, 40.99, false, null
+5, Ford Mondeo, false, null
