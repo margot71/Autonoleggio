@@ -11,22 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /* Modifiche da fare in Noleggio:
- * in rimuoviBatMobile: 1) manca la chiamata per riempire l'array;
- *                      2) se id inesistente, segnalare; 
- *                      3) se file non trovato, msg per nulla da rimuovere
- * in rimuoviAuto: 1) manca la chiamata per riempire l'array;
- *                 2) se id inesistente, segnalare; 
- *                 3) se file non trovato, msg per nulla da rimuovere
- * in selezionaBatMobile: 1) decidere, per riempire l'array, se richiamare getBatmobileFile (ma, se file 
- *                           inesistente, non deve crearne uno nuovo ma dare msg per nessun mezzo disponibile) o
- *                           creare un'altra funzione;
- *                        2) se array vuoto, dare msg per nessun mezzo disponibile  
- *                        3) per mezzo selezionato, dare msg di conferma
- * in selezioneAuto: 1) decidere, per riempire l'array, se richiamare getAutoFile (ma, se file inesistente, non
- *                      deve crearne uno nuovo ma dare msg per nessun mezzo disponibile) o creare un'altra
- *                      funzione;
- *                   2) se array vuoto, dare msg per nessun mezzo disponibile  
- *                   3) per mezzo selezionato, dare msg di conferma                     
+ * in selezionaBatMobile: 1) per mezzo selezionato, non fa nulla??? Non c'è nulla da aggiornare
+ *                                       
  */
 public class Noleggio {
 	private ArrayList<Auto> autoDisponibili;
@@ -46,20 +32,27 @@ public class Noleggio {
 		System.out.println("Hai aggiunto" + batMobile + "alla lista delle BatMobili.");
 	}
 
-	public void rimuoviBatMobile(int IDbatMobile) {//int IDbatMobile invece che BatMobile batMobile
-		for (BatMobile bat : listaBatmobili) //ciclo for di ricerca seguito da un remove+break
-		{
-			try {
+	public void rimuoviBatMobile(int IDbatMobile) throws FileNotFoundException, IOException {
+		int mezziDis = 0;
+		System.out.println("Rimozione Batmezzo in corso:");
+		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
+        if (!listaBatmobili.isEmpty()) {
+			for (BatMobile bat : listaBatmobili) {
 				if (bat.getIdAuto()==IDbatMobile){
 					System.out.println(bat);
-					autoDisponibili.remove(bat);
+					listaBatmobili.remove(bat);
+					riscriveBatmobileFile("src/listaBatmobili.txt");
 					System.out.println("rimossa auto " + bat.getIdAuto());
+					mezziDis ++;
 					break;
-				}
+				} 
 			}
-			catch (java.util.ConcurrentModificationException e) {}
+			if (mezziDis == 0) {
+				System.out.println("Non ci sono mezzi da rimuovere per l'id inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono mezzi da rimuovere"); //Array vuoto
 		}
-		listaBatmobili.remove(IDbatMobile);
 	}
 
 	public void ricercaBatMobile(String nome) throws FileNotFoundException, IOException {
@@ -88,13 +81,23 @@ public class Noleggio {
         }
 	}
 
-	public void selezionaBatMobile(int idAuto) {
+	public void selezionaBatMobile(int idAuto) throws FileNotFoundException, IOException {
+		int mezziDis = 0;
 		System.out.println("Selezione di Batmobile per ID in corso:");
-		for (BatMobile bat : listaBatmobili) {
-			if (bat.getIdAuto() == idAuto) {
-				System.out.println(bat);
+		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
+        if (!listaBatmobili.isEmpty()) {
+			for (BatMobile bat : listaBatmobili) {
+				if (bat.getIdAuto() == idAuto) {
+					System.out.println(bat);
+					mezziDis ++;
+				}
 			}
-		}
+			if (mezziDis == 0) {
+				System.out.println("Non ci sono mezzi disponibili per l'id inserito");
+	        }
+	    } else {
+	    	System.out.println("Non ci sono mezzi disponibili"); //Array vuoto
+	    }
 	}
 
 	public void aggiungiAuto(Auto auto) throws FileNotFoundException, IOException {
@@ -104,18 +107,26 @@ public class Noleggio {
 		System.out.println("Hai aggiunto" + auto + "alla lista delle auto.");
 	}
 
-	public void rimuoviAuto(int idAuto) {//int idAuto invece che Auto auto
-		for (Auto auto : autoDisponibili) //ciclo for di ricerca seguito da un remove+break
-		{
-			try {
+	public void rimuoviAuto(int idAuto) throws FileNotFoundException, IOException {
+		int autoDis = 0;
+		System.out.println("Rimozione Auto in corso:");
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
+        if (!autoDisponibili.isEmpty()) {			
+			for (Auto auto : autoDisponibili) {
 				if (auto.getIdAuto() == idAuto){
 					System.out.println(auto);
 					autoDisponibili.remove(auto);
+					riscriveAutoFile("src/listaAuto.txt");
 					System.out.println("rimossa auto " + auto.getIdAuto());
+					autoDis ++;
 					break;
 				}
 			}
-			catch (java.util.ConcurrentModificationException e) {}
+			if (autoDis == 0) {
+				System.out.println("Non ci sono auto da rimuovere per l'id inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono auto da rimuovere"); //Array vuoto
 		}
 	}
 
@@ -157,17 +168,49 @@ public class Noleggio {
         }
 	}
 
-	public void selezioneAuto(int idAuto) {
+	public void noleggioAuto(int idAuto) throws FileNotFoundException, IOException {
+		int autoDis = 0;
 		System.out.println("Selezione di Auto per ID in corso:");
-		for (Auto auto : autoDisponibili) {
-			if (auto.getIdAuto() == idAuto) {
-				auto.setStatoNoleggio(true);
-				auto.setDataNoleggio(LocalDate.now());
-				System.out.println(auto);
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
+        if (!autoDisponibili.isEmpty()) {
+			for (Auto auto : autoDisponibili) {
+				if (auto.getIdAuto() == idAuto) {
+					auto.setStatoNoleggio(true);
+					auto.setDataNoleggio(LocalDate.now());
+					riscriveAutoFile("src/listaAuto.txt");
+					System.out.println(auto);
+					autoDis ++;
+				}
 			}
-		}
+			if (autoDis == 0) {
+				System.out.println("Non ci sono auto disponibili per l'id inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono auto disponibili"); //Array vuoto
+        }
 	}
 	
+	public void riconsegnaAuto(int idAuto) throws FileNotFoundException, IOException {
+		int autoDis = 0;
+		System.out.println("Selezione di Auto per ID in corso:");
+		autoDisponibili = getAutoFile("src/listaAuto.txt");
+        if (!autoDisponibili.isEmpty()) {
+			for (Auto auto : autoDisponibili) {
+				if (auto.getIdAuto() == idAuto) {
+					auto.setStatoNoleggio(false);
+					auto.setDataNoleggio(null);
+					riscriveAutoFile("src/listaAuto.txt");
+					System.out.println(auto);
+					autoDis ++;
+				}
+			}
+			if (autoDis == 0) {
+				System.out.println("Non ci sono auto disponibili per l'id inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono auto disponibili"); //Array vuoto
+        }
+	}
 	public ArrayList<Auto> getAutoFile(String path) throws FileNotFoundException, IOException {
 		String filePath = path;
 		File file = new File(filePath);
@@ -195,12 +238,25 @@ public class Noleggio {
 
 	public void aggiungiAutoFile(Auto auto) throws FileNotFoundException, IOException {
 		String filePath = "src/listaAuto.txt";
-		String line;
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
 			writer.write(auto.toStringPrint());
 			writer.newLine();
 			writer.close();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void riscriveAutoFile(String path){
+		//Crea e riempie il file con l'array
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+			for (Auto auto : autoDisponibili){
+				writer.write(auto.toStringPrint());
+				writer.newLine();
+			}
+			writer.close();
+		}
+		catch (IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -225,7 +281,6 @@ public class Noleggio {
 	
 	public void aggiungiBatmobileFile(BatMobile batmobile) throws FileNotFoundException, IOException {
 		String filePath = "src/listaBatmobili.txt";
-		String line;
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
 			writer.write(batmobile.toStringPrint());
 			writer.newLine();
@@ -234,8 +289,18 @@ public class Noleggio {
 			e.printStackTrace();
 		}
 	}
-
-	public void rimuoviAutoFile() {
-
+	
+	public void riscriveBatmobileFile(String path){
+		//Crea e riempie il file con l'array
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+			for (BatMobile bat : listaBatmobili){
+				writer.write(bat.toStringPrint());
+				writer.newLine();
+			}
+			writer.close();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 }
