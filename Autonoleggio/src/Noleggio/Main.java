@@ -67,7 +67,8 @@ public class Main {
 						noleggio.selezioneAuto(idAuto);
 						break;
 					case 4:
-						return;
+						start = GestioneMenu.esciOprosegui();
+						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
 				}
@@ -105,7 +106,8 @@ public class Main {
 						noleggio.ricercaAuto(nomeAuto);
 						break;
 					case 5:
-						return;
+						start = GestioneMenu.esciOprosegui();
+						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
 				}
@@ -140,15 +142,14 @@ public class Main {
 						noleggio.selezionaBatMobile(idAuto);
 						break;
 					case 5:
-						return;
+						start = GestioneMenu.esciOprosegui();
+						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
 				}
 			}
+			start = GestioneMenu.esciOprosegui();
 		}
-		System.out.println("Vuoi effettuare una nuova azione? \n1. Sì \n2. Esci");
-		start = GestioneMenu.esciOprosegui(scan.nextInt());
-		scan.nextLine();
 	}
 }
 
