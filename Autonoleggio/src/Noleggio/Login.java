@@ -16,7 +16,7 @@ public class Login {
 			String line;
 			String userRead;
 			String passwordRead;
-			String typeRead;
+			String typeRead=null;
 			
 			while( (line =reader.readLine()) != null) {
 				userRead="";
@@ -38,21 +38,22 @@ public class Login {
 					else if (typeRead.equals("Batman"))
 						flag=3;
 				}
-				if (flag==0)
-				{ 
-					System.out.println("Username o Password errati");
-					return 0;
-				}
-				else 
-				{
-					System.out.println("Accesso effettuato per "+typeRead);
-					return flag;
-				}
+			}
+			if (flag==0)
+			{ 
+				System.out.println("Username o Password errati");
+				return 0;
+			}
+			else 
+			{
+				System.out.println("Accesso effettuato per "+typeRead);
+				return flag;
 			}
 		}
-		catch (IOException e) {return flag;};		
-		System.out.println("Wrong password or user");
- 		return flag;
+		catch (IOException e) {
+			System.out.println("Wrong password or user");
+			return flag;
+		}		
 	}
 }
 
