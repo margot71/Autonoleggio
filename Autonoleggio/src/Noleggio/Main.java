@@ -63,7 +63,7 @@ public class Main {
 						System.out.println("Inserisci l'identificativo dell'auto da noleggiare: ");
 						idAuto = scan.nextInt();
 						scan.nextLine();
-						noleggio.selezioneAuto(idAuto);
+						noleggio.noleggioAuto(idAuto);
 						break;
 					case 4:
 						return;
@@ -72,7 +72,7 @@ public class Main {
 				}
 			} else if(flag == 2) {
 				//l'utente è un manager
-				menu = "Cosa vuoi fare? \n 1. Inserisci un'auto \n 2. Rimuovi un'auto \n 3. Ricerca un'auto per prezzo \n 4. Ricerca un'auto per nome \n 5. Esci";
+				menu = "Cosa vuoi fare? \n 1. Inserisci un'auto \n 2. Rimuovi un'auto \n 3. Ricerca un'auto per prezzo \n 4. Ricerca un'auto per nome \n 5. Inserisci riconsegna auto \n 6. Esci";
 				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
 				switch (sceltaMenu) {
 					case 1:
@@ -104,6 +104,12 @@ public class Main {
 						noleggio.ricercaAuto(nomeAuto);
 						break;
 					case 5:
+						System.out.println("Inserisci l'identificativo dell'auto riconsegnata: ");
+						idAuto = scan.nextInt();
+						scan.nextLine();
+						noleggio.riconsegnaAuto(idAuto);
+						break;
+					case 6:
 						return;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
