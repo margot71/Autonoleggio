@@ -19,17 +19,25 @@ public class Main {
 		int flag;
 		
 		Scanner scan = new Scanner(System.in);
-		//Login utente
-		System.out.println("Inserisci user: ");
-		user = scan.nextLine();
-		System.out.println("Inserisci password: ");
-		psw = scan.nextLine();
-		//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
-		Login login = new Login();
-		flag = login.inserisciUserPsw(user, psw);
+//		//Login utente
+//		System.out.println("Inserisci user: ");
+//		user = scan.nextLine();
+//		System.out.println("Inserisci password: ");
+//		psw = scan.nextLine();
+//		//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
+//		Login login = new Login();
+//		flag = login.inserisciUserPsw(user, psw);
 		
 		boolean start = true;
 		while (start) {
+			//Login utente
+			System.out.println("Inserisci user: ");
+			user = scan.nextLine();
+			System.out.println("Inserisci password: ");
+			psw = scan.nextLine();
+			//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
+			Login login = new Login();
+			flag = login.inserisciUserPsw(user, psw);
 			Noleggio noleggio = new Noleggio();
 			//Verifica sulla tipologia utente per presentare il menu, quindi gestire il menu con lo switch		
 			if(flag == 1) {
