@@ -10,6 +10,24 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/* Modifiche da fare in Noleggio:
+ * in rimuoviBatMobile: 1) manca la chiamata per riempire l'array;
+ *                      2) se id inesistente, segnalare; 
+ *                      3) se file non trovato, msg per nulla da rimuovere
+ * in rimuoviAuto: 1) manca la chiamata per riempire l'array;
+ *                 2) se id inesistente, segnalare; 
+ *                 3) se file non trovato, msg per nulla da rimuovere
+ * in selezionaBatMobile: 1) decidere, per riempire l'array, se richiamare getBatmobileFile (ma, se file 
+ *                           inesistente, non deve crearne uno nuovo ma dare msg per nessun mezzo disponibile) o
+ *                           creare un'altra funzione;
+ *                        2) se array vuoto, dare msg per nessun mezzo disponibile  
+ *                        3) per mezzo selezionato, dare msg di conferma
+ * in selezioneAuto: 1) decidere, per riempire l'array, se richiamare getAutoFile (ma, se file inesistente, non
+ *                      deve crearne uno nuovo ma dare msg per nessun mezzo disponibile) o creare un'altra
+ *                      funzione;
+ *                   2) se array vuoto, dare msg per nessun mezzo disponibile  
+ *                   3) per mezzo selezionato, dare msg di conferma                     
+ */
 public class Noleggio {
 	private ArrayList<Auto> autoDisponibili;
 	private ArrayList<BatMobile> listaBatmobili;
@@ -45,19 +63,29 @@ public class Noleggio {
 	}
 
 	public void ricercaBatMobile(String nome) throws FileNotFoundException, IOException {
+		int mezziDis = 0;
 		System.out.println("Ricerca Batmobili in corso:");
 		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
-		if (nome.equals("tutte")) {
-			for (BatMobile bat : listaBatmobili) {
-				System.out.println(bat);
-			}
-		} else {
-			for (BatMobile bat : listaBatmobili) {
-				if (bat.getNome().equals(nome)) {
+        if (!autoDisponibili.isEmpty()) {
+			if (nome.equals("tutte")) {
+				for (BatMobile bat : listaBatmobili) {
 					System.out.println(bat);
+					mezziDis ++;
+				}
+			} else {
+				for (BatMobile bat : listaBatmobili) {
+					if (bat.getNome().equals(nome)) {
+						System.out.println(bat);
+						mezziDis ++;
+					}
 				}
 			}
-		}
+			if (mezziDis == 0) {
+				System.out.println("Non ci sono auto disponibili per il nome inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono auto disponibili"); //Array vuoto
+        }
 	}
 
 	public void selezionaBatMobile(int idAuto) {
@@ -92,23 +120,41 @@ public class Noleggio {
 	}
 
 	public void ricercaAuto(String nome) throws FileNotFoundException, IOException {
+		int autoDis = 0;
 		System.out.println("Ricerca Auto per nome in corso:");
 		autoDisponibili = getAutoFile("src/listaAuto.txt");
-		for (Auto auto : autoDisponibili) {
-			if (auto.getNome().equals(nome)) {
-				System.out.println(auto);
+        if (!autoDisponibili.isEmpty()) {
+			for (Auto auto : autoDisponibili) {
+				if (auto.getNome().contains(nome)) {
+					System.out.println(auto);
+					autoDis ++;
+				}
 			}
-		}
+			if (autoDis == 0) {
+				System.out.println("Non ci sono auto disponibili per il nome inserito");
+			}
+        } else {
+        	System.out.println("Non ci sono auto disponibili"); //Array vuoto
+        }
 	}
 
 	public void ricercaAuto(double prezzo) throws FileNotFoundException, IOException {
+		int autoDis = 0;
 		System.out.println("Ricerca Auto per prezzo in corso:");
 		autoDisponibili = getAutoFile("src/listaAuto.txt");
-		for (Auto auto : autoDisponibili) {
-			if (auto.getPrezzo() <= prezzo) {
-				System.out.println(auto);
+        if (!autoDisponibili.isEmpty()) {
+			for (Auto auto : autoDisponibili) {
+				if (auto.getPrezzo() <= prezzo) {
+					System.out.println(auto);
+					autoDis ++;
+				}
 			}
-		}
+			if (autoDis == 0) {
+				System.out.println("Non ci sono auto disponibili per la cifra inserita");
+			}
+        } else {
+        	System.out.println("Non ci sono auto disponibili"); //Array vuoto
+        }
 	}
 
 	public void selezioneAuto(int idAuto) {
