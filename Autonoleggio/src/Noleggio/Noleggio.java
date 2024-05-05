@@ -14,8 +14,7 @@ public class Noleggio {
 	private ArrayList<Auto> autoDisponibili;
 	private ArrayList<BatMobile> listaBatmobili;
 
-	// costruttore che definisce una nuova array contenente l'oggetto Auto, che
-	// deriva dalla classe Auto
+	// costruttore che definisce una nuova array contenente l'oggetto Auto, che deriva dalla classe Auto
 	Noleggio() {
 		this.autoDisponibili = new ArrayList<>();
 		this.listaBatmobili = new ArrayList<>();
