@@ -1,37 +1,143 @@
 package Noleggio;
 
+import java.time.LocalDate;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Main {
  
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		String user;
 		String psw;
+		int sceltaMenu;
+		String menu;
+		int idAuto;
+		String nomeAuto;
+		double prezzo;
+		
 		Scanner scan = new Scanner(System.in);
 		//Login utente
 		System.out.println("Inserisci user: ");
 		user = scan.nextLine();
 		System.out.println("Inserisci password: ");
 		psw = scan.nextLine();
+		//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico in base al tipo utente
 		Login login = new Login();
-		login.inserisciUserPsw(user, psw);
+		int utente = login.inserisciUserPsw(user, psw);
 		
-		//login.inserisciUserPsw restituisce null se utente inesistente o valore numerico per tipo utente
-		//Verifica su tipologia di utente con if
-		//A seconda dell'utente, presentare il menu appropriato con switch
-		
-		Noleggio noleggio = new Noleggio();
-		//nel parametro bisogna aggiungere new, altrimenti sovrascrive ogni volta
-		noleggio.aggiungiAuto(new Auto(001, "Fiat Punto", 40.99, false, null));
-		noleggio.aggiungiAuto(new Auto(002, "Ford Fiesta", 45.29, false, null));
-		noleggio.aggiungiAuto(new Auto(003, "AlfaRomeo Giulietta", 70.99, false, null));
-		 
-		noleggio.ricercaAuto(52);
-		noleggio.selezioneAuto(1);
-		
-		noleggio.aggiungiBatMobile( new BatMobile(007, "Batmobile num1"));
-		noleggio.aggiungiBatMobile( new BatMobile(1, "Batmobile num2"));
-		noleggio.aggiungiBatMobile( new BatMobile(2, "Batmoto"));
-		noleggio.ricercaBatMobile("tutte");
-		noleggio.selezionaBatMobile(7);
+		boolean start = true;
+		while (start) {
+			Noleggio noleggio = new Noleggio();
+			//Verifica sulla tipologia utente per presentare il menu, quindi gestire il menu con lo switch		
+			if(utente == 1) {
+				//l'utente è un cliente
+				System.out.println("BENVENUTO NEL SITO DELL'AUTONOLEGGIO MOVEIT");
+				menu = "Cosa vuoi fare? \n 1. Ricerca un'auto per prezzo \n 2. Ricerca un'auto per nome \n 3. Noleggia un'auto \n 4. Esci";
+				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
+				switch (sceltaMenu) {
+				case 1:
+					System.out.println("Inserisci il massimo prezzo giornaliero dell'auto (es.40,99): ");
+					prezzo = scan.nextDouble();
+					scan.nextLine();
+					noleggio.ricercaAuto(prezzo);
+					break;
+				case 2:
+					System.out.println("Inserisci la marca e il modello dell'auto: ");
+					nomeAuto = scan.nextLine();
+					noleggio.ricercaAuto(nomeAuto);
+					break;
+				case 3:
+					System.out.println("Inserisci l'identificativo dell'auto da noleggiare: ");
+					idAuto = scan.nextInt();
+					scan.nextLine();
+					noleggio.selezioneAuto(idAuto);
+					break;
+				case 4:
+					return;
+				default:
+					System.out.println("Scelta non valida. Riprova.");
+				}
+			} else if(utente == 2) {
+				//l'utente è un manager
+				System.out.println("CONSOLLE AUTONOLEGGIO MOVEIT");
+				menu = "Cosa vuoi fare? \n 1. Inserisci un'auto \n 2. Rimuovi un'auto \n 3. Ricerca un'auto per prezzo \n 4. Ricerca un'auto per nome \n 5. Esci";
+				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
+				switch (sceltaMenu) {
+					case 1:
+						System.out.println("Inserisci l'identificativo dell'auto: ");
+						idAuto = scan.nextInt();
+						scan.nextLine();
+						System.out.println("Inserisci la marca e il modello dell'auto: ");
+						nomeAuto = scan.nextLine();
+						System.out.println("Inserisci il prezzo giornaliero dell'auto (es.40,99): ");
+						prezzo = scan.nextDouble();
+						scan.nextLine();
+						noleggio.aggiungiAuto(new Auto(idAuto, nomeAuto, prezzo, false, null));
+						break;
+					case 2:
+						System.out.println("Inserisci l'identificativo dell'auto: ");
+						idAuto = scan.nextInt();
+						scan.nextLine();
+						noleggio.rimuoviAuto(idAuto);
+						break;
+					case 3:
+						System.out.println("Inserisci il massimo prezzo giornaliero dell'auto (es.40,99): ");
+						prezzo = scan.nextDouble();
+						scan.nextLine();
+						noleggio.ricercaAuto(prezzo);
+						break;
+					case 4:
+						System.out.println("Inserisci la marca e il modello dell'auto: ");
+						nomeAuto = scan.nextLine();
+						noleggio.ricercaAuto(nomeAuto);
+						break;
+					case 5:
+						return;
+					default:
+						System.out.println("Scelta non valida. Riprova.");
+				}
+			} else {
+				//l'utente è Batman
+				System.out.println("BATGARAGE");
+				menu = "Cosa vuoi fare? \n 1. Inserisci un mezzo \n 2. Rimuovi un mezzo \n 3. Ricerca un mezzo \n 4. Seleziona un mezzo \n 5. Esci";
+				sceltaMenu = GestioneMenu.CreaMenuIniz(menu);
+				switch (sceltaMenu) {
+				case 1:
+					System.out.println("Inserisci l'identificativo del mezzo: ");
+					idAuto = scan.nextInt();
+					scan.nextLine();
+					System.out.println("Inserisci il nome del mezzo: ");
+					nomeAuto = scan.nextLine();
+					noleggio.aggiungiBatMobile(new BatMobile(idAuto, nomeAuto));
+					break;
+				case 2:
+					System.out.println("Inserisci l'identificativo del mezzo: ");
+					idAuto = scan.nextInt();
+					scan.nextLine();
+					noleggio.rimuoviBatMobile(idAuto);
+					break;
+				case 3:
+					System.out.println("Inserisci il nome del mezzo: ");
+					nomeAuto = scan.nextLine();
+					noleggio.ricercaBatMobile(nomeAuto);
+					break;
+				case 4:
+					System.out.println("Inserisci l'identificativo del mezzo da usare: ");
+					idAuto = scan.nextInt();
+					scan.nextLine();
+					noleggio.selezionaBatMobile(idAuto);
+					break;
+				case 5:
+					return;
+				default:
+					System.out.println("Scelta non valida. Riprova.");
+				}
+			}
+		}
+		System.out.println("Vuoi effettuare una nuova azione? \n1. Sì \n2. Esci");
+		start = GestioneMenu.esciOprosegui(scan.nextInt());
+		scan.nextLine();
 	}
 }
 
