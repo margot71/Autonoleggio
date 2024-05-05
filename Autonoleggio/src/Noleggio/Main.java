@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class Main {
 
-
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		String user;
 		String psw;
@@ -145,10 +144,10 @@ public class Main {
 						System.out.println("Scelta non valida. Riprova.");
 				}
 			}
+			System.out.println("Vuoi effettuare una nuova azione? \n1. Sì \n2. Esci");
+			start = GestioneMenu.esciOprosegui(scan.nextInt());
+			scan.nextLine();
 		}
-		System.out.println("Vuoi effettuare una nuova azione? \n1. Sì \n2. Esci");
-		start = GestioneMenu.esciOprosegui(scan.nextInt());
-		scan.nextLine();
 	}
 }
 

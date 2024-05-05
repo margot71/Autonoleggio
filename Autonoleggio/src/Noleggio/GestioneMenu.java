@@ -21,6 +21,7 @@ public class GestioneMenu {
 		if (number == 1) {
 			return true;
 		} else if (number == 2){
+			System.out.println("Grazie per aver utilizzato i nostri servizi, arrivederci");
 			return false;
 		}
 		return false;
