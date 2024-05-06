@@ -29,13 +29,16 @@ public class Main {
 			//login.inserisciUserPsw restituisce 0 se utente inesistente o valore numerico in base al tipo utente
 			Login login = new Login();
 			flag = login.inserisciUserPsw(user, psw);
+			if(flag == 4) {
+				return;
+			}
 		}
 		
 		if(flag == 1) {
 			System.out.println("BENVENUTO NEL SITO DELL'AUTONOLEGGIO MOVEIT");
-		} else if(flag == 1) {
+		} else if(flag == 2) {
 			System.out.println("CONSOLLE AUTONOLEGGIO MOVEIT");
-		} else if(flag == 1) {
+		} else if(flag == 3) {
 			System.out.println("BATGARAGE");
 		}
 		
@@ -66,7 +69,7 @@ public class Main {
 						noleggio.noleggioAuto(idAuto);
 						break;
 					case 4:
-						start = GestioneMenu.esciOprosegui();
+						start = GestioneMenu.esciOprosegui(scan.nextInt());
 						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
@@ -111,7 +114,7 @@ public class Main {
 						noleggio.riconsegnaAuto(idAuto);
 						break;
 					case 6:
-						start = GestioneMenu.esciOprosegui();
+						start = GestioneMenu.esciOprosegui(scan.nextInt());
 						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
@@ -147,7 +150,7 @@ public class Main {
 						noleggio.selezionaBatMobile(idAuto);
 						break;
 					case 5:
-						start = GestioneMenu.esciOprosegui();
+						start = GestioneMenu.esciOprosegui(scan.nextInt());
 						break;
 					default:
 						System.out.println("Scelta non valida. Riprova.");
