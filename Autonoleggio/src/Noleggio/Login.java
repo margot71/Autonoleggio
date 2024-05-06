@@ -8,7 +8,7 @@ import java.util.Scanner;
 //LOGIN deve ritornare NULL se non � verificato (utente inesistente) oppure valore numerico 1,2,3 per la tipologia 
 public class Login {
 	Scanner scan=new Scanner(System.in);
-	String filePath = "src/userPasswordFile.txt";
+	String filePath = "userPasswordFile.txt";
 	public int inserisciUserPsw(String userInput, String pswInput) {
 		
 		int flag=0;
@@ -41,12 +41,17 @@ public class Login {
 			}
 			if (flag==0)
 			{ 
-				System.out.println("Username o Password errati. Riprovare");
-				return 0;
+				System.out.println("Username e/o Password inesistenti. 1) Registrarsi o 2) Riprovare");
+				if (scan.nextLine().equals("1")) {
+					RegistraUtente(userInput, pswInput);
+					flag=1;
+					return flag;
+				} else {
+					return 0;
+				}
  		}
 			else 
 			{
-//				System.out.println("Accesso effettuato per "+typeRead);
 				return flag;
 			}
 		}
@@ -55,5 +60,21 @@ public class Login {
 			return flag;
 		}		
 	}
+	
+	public void RegistraUtente(String userRead, String pswInput) throws FileNotFoundException, IOException {
+		String filePath = "userPasswordFile.txt";
+		File file = new File(filePath);
+		if (!file.exists())
+			file.createNewFile();
+		String utente;
+		utente = userRead + "," + pswInput + ",Cliente";
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+			writer.write(utente);
+			writer.newLine();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Utente inserito correttamente");
+	}
 }
-
