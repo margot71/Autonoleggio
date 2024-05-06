@@ -59,7 +59,7 @@ public class Noleggio {
 		int mezziDis = 0;
 		System.out.println("Ricerca Batmobili in corso:");
 		listaBatmobili = getBatmobileFile("src/listaBatmobili.txt");
-        if (!autoDisponibili.isEmpty()) {
+        if (!listaBatmobili.isEmpty()) {
 			if (nome.equals("tutte")) {
 				for (BatMobile bat : listaBatmobili) {
 					System.out.println(bat);
