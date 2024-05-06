@@ -44,12 +44,20 @@ public class Login {
 			}
 			if (flag==0)
 			{ 
-				System.out.println("Username e/o Password inesistenti. 1) Registrarsi o 2) Riprovare");
-				if (scan.nextLine().equals("1")) {
+				System.out.println("Username e/o Password inesistenti. 1) Registrarsi, 2) Riprovare o 3) Uscire");
+				String scelta= scan.nextLine();
+				if (scelta.equals("1")) {
 					RegistraUtente(userInput, pswInput);
 					flag=1;
 					return flag;
+				} else if (scelta.equals("2")) {
+					return 0;
+				} else if (scelta.equals("3")) {
+					flag = 4;
+					System.out.println("Grazie per aver utilizzato i nostri servizi, arrivederci");
+					return flag;
 				} else {
+					System.out.println("Valore non riconosciuto");
 					return 0;
 				}
  		}
