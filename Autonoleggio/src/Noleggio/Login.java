@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+import java.security.MessageDigest; 
+import java.security.NoSuchAlgorithmException; 
 
 //LOGIN deve ritornare NULL se non � verificato (utente inesistente) oppure valore numerico 1,2,3 per la tipologia 
 public class Login {
@@ -29,7 +31,8 @@ public class Login {
 					  passwordRead=parti[1].trim(); 
 					  typeRead=parti[2].trim() ;
 				}
-				if (userInput.equals(userRead) && passwordRead.equals(pswInput))
+				String pswHash = hashPassword(pswInput);
+				if (userInput.equals(userRead) && passwordRead.equals(pswHash))
 				{	
 					if (typeRead.equals("Cliente"))
 						flag=1;
@@ -67,7 +70,8 @@ public class Login {
 		if (!file.exists())
 			file.createNewFile();
 		String utente;
-		utente = userRead + "," + pswInput + ",Cliente";
+		String pswHash = hashPassword(pswInput);
+		utente = userRead + "," + pswHash + ",Cliente";
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
 			writer.write(utente);
 			writer.newLine();
@@ -77,4 +81,33 @@ public class Login {
 		}
 		System.out.println("Utente inserito correttamente");
 	}
+	
+    public static String hashPassword(String password) { 
+        try { 
+        	// Creiamo una MessageDigest instance per SHA-256 
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            //System.out.println("istanza di SHA-256 creata");
+            byte[] encodedhash = digest.digest(password.getBytes());
+            //System.out.println("password hashata, array di byte generato");
+ // Convertiamo l'array di byte in una stringa esadecimale
+//	            for(byte b : encodedhash) {
+//	                System.out.format("%02x", b);
+//	            }
+            StringBuilder hexString = new StringBuilder(2 * encodedhash.length); 
+
+		  for (int i = 0; i < encodedhash.length; i++) {
+		      String hex = Integer.toHexString(0xff & encodedhash[i]); 
+		      //System.out.format("Valore byte: %02x --> Stringa esadecimale: %s\n",encodedhash[i],hex);
+		      if(hex.length() == 1) { 
+		    	  hexString.append('0'); 
+		      }
+		      hexString.append(hex); 
+		  }
+		  //System.out.println("password hashata completa: "+hexString.toString());
+		  return hexString.toString(); 
+	      } catch (NoSuchAlgorithmException e) { 
+	          throw new RuntimeException(e); 
+          } 
+    }
 }
+
